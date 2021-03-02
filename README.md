@@ -6,7 +6,7 @@ I prefer to compare objects with `equals` method.
 
 Also I prefer strict scalar comparison.
 
-To use is add the following to `phpunit.xml`
+To use it add the following to `phpunit.xml`
 
 ```
   <extensions>
