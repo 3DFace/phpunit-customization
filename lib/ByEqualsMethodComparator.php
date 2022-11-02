@@ -32,8 +32,13 @@ class ByEqualsMethodComparator extends Comparator
 				$expected_arr = $expected->jsonSerialize();
 				$actual_arr = $actual->jsonSerialize();
 
-				$expected_str = \json_encode($this->diff($expected_arr, $actual_arr), JSON_THROW_ON_ERROR);
-				$actual_str = \json_encode($this->diff($actual_arr, $expected_arr), JSON_THROW_ON_ERROR);
+				if(\is_array($expected_arr) && \is_array($actual_arr)) {
+					$expected_str = \json_encode($this->diff($expected_arr, $actual_arr), JSON_THROW_ON_ERROR);
+					$actual_str = \json_encode($this->diff($actual_arr, $expected_arr), JSON_THROW_ON_ERROR);
+				}else{
+					$expected_str = $this->exporter->export($expected);
+					$actual_str = $this->exporter->export($actual);
+				}
 			} else {
 				$expected_str = $this->exporter->export($expected);
 				$actual_str = $this->exporter->export($actual);
