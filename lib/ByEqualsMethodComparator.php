@@ -68,7 +68,7 @@ class ByEqualsMethodComparator extends Comparator
 			} else {
 				$v2 = $x2[$k];
 				if (\is_array($v1)) {
-					if ($diff = $this->diff($v1, $v2)) {
+					if ($this->diff($v1, $v2)) {
 						$result[$k] = $v1;
 					}
 				} /** @noinspection TypeUnsafeComparisonInspection */
