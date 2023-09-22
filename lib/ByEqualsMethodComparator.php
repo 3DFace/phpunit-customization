@@ -4,6 +4,7 @@ namespace dface\PhpunitCustomization;
 
 use SebastianBergmann\Comparator\Comparator;
 use SebastianBergmann\Comparator\ComparisonFailure;
+use SebastianBergmann\Exporter\Exporter;
 
 class ByEqualsMethodComparator extends Comparator
 {
@@ -25,31 +26,31 @@ class ByEqualsMethodComparator extends Comparator
 	 * @throws ComparisonFailure
 	 * @throws \JsonException
 	 */
-	public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false) : void
+	public function assertEquals($expected, $actual, float $delta = 0.0, bool $canonicalize = false, bool $ignoreCase = false) : void
 	{
 		if (!$expected->equals($actual)) {
+			$exporter = new Exporter;
 			if ($expected instanceof \JsonSerializable && $actual instanceof \JsonSerializable) {
 				$expected_arr = $expected->jsonSerialize();
 				$actual_arr = $actual->jsonSerialize();
 
-				if(\is_array($expected_arr) && \is_array($actual_arr)) {
+				if (\is_array($expected_arr) && \is_array($actual_arr)) {
 					$expected_str = \json_encode($this->diff($expected_arr, $actual_arr), JSON_THROW_ON_ERROR);
 					$actual_str = \json_encode($this->diff($actual_arr, $expected_arr), JSON_THROW_ON_ERROR);
-				}else{
-					$expected_str = $this->exporter->export($expected);
-					$actual_str = $this->exporter->export($actual);
+				} else {
+					$expected_str = $exporter->export($expected);
+					$actual_str = $exporter->export($actual);
 				}
 			} else {
-				$expected_str = $this->exporter->export($expected);
-				$actual_str = $this->exporter->export($actual);
+				$expected_str = $exporter->export($expected);
+				$actual_str = $exporter->export($actual);
 			}
 
 			throw new ComparisonFailure(
 				$expected,
 				$actual,
-				$this->exporter->export($expected),
-				$this->exporter->export($actual),
-				false,
+				$exporter->export($expected),
+				$exporter->export($actual),
 				\sprintf(
 					'Failed asserting that %s matches expected %s.',
 					$actual_str,

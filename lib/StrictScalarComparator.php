@@ -4,6 +4,7 @@ namespace dface\PhpunitCustomization;
 
 use SebastianBergmann\Comparator\Comparator;
 use SebastianBergmann\Comparator\ComparisonFailure;
+use SebastianBergmann\Exporter\Exporter;
 
 class StrictScalarComparator extends Comparator
 {
@@ -24,7 +25,7 @@ class StrictScalarComparator extends Comparator
 	 *
 	 * @throws ComparisonFailure
 	 */
-	public function assertEquals($expected, $actual, $delta = 0.0, $canonicalize = false, $ignoreCase = false) : void
+	public function assertEquals($expected, $actual, float $delta = 0.0, bool $canonicalize = false, bool $ignoreCase = false) : void
 	{
 		if ($expected === $actual) {
 			return;
@@ -34,15 +35,15 @@ class StrictScalarComparator extends Comparator
 			return;
 		}
 
-		$str_expected = $this->exporter->export($expected);
-		$str_actual = $this->exporter->export($actual);
+		$exporter = new Exporter;
+		$str_expected = $exporter->export($expected);
+		$str_actual = $exporter->export($actual);
 
 		throw new ComparisonFailure(
 			$expected,
 			$actual,
 			$str_expected,
 			$str_actual,
-			false,
 			"Failed asserting that $str_actual matches expected $str_expected"
 		);
 	}
