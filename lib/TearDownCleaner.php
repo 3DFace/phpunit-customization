@@ -13,8 +13,6 @@ trait TearDownCleaner
 				$type = $prop->getType();
 				$nullable = $type === null || $type->allowsNull();
 				if ($nullable && $prop->getDeclaringClass()->isSubclassOf(self::class)) {
-					$prop->setAccessible(true);
-					/** @noinspection PhpRedundantOptionalArgumentInspection */
 					$prop->setValue($this, null);
 				}
 			}
